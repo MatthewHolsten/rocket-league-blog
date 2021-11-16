@@ -32,7 +32,7 @@
 			<a name="top_page"></a>
 			Rocket League Blog<br>
 			Matt Holsten<br>
-			Updated: November 4, 2021<br>
+			Updated: November 15, 2021<br>
 			Go to: <a href="#most_recent_post">Most recent post</a><br> <br> <br> <br>
 		</div>
 				
@@ -211,7 +211,6 @@
 			<a class="source-link" name="source4_2" target="_blank" href="https://en.wikipedia.org/wiki/Nosgoth">[2] Nosgoth</a>
 			<br>
 			<a class="source-link" name="source4_3" target="_blank" href="https://www.youtube.com/watch?v=Bb_NBiJ0ilk">[3] Noclip interview with Psyonix employees</a>
-			<a name="most_recent_post"></a>
 			<br><br><br>
 		</p>
 		
@@ -252,10 +251,73 @@
 			<a class="source-link" name="source5_2" target="_blank" href="https://www.apple.com/apple-arcade/?itscg=10000&itsct=arc-0-apl_hp-lrn_tle-apl-ref-210507">[2] Apple Arcade</a>
 			<br>
 			<a class="source-link" name="source5_3" target="_blank" href="https://www.youtube.com/watch?v=Bb_NBiJ0ilk">[3] Noclip interview with Psyonix Employees</a>
+			<a name="most_recent_post"></a>
+			<br> <br> <br>
+			
+		</p>
+		
+		
+		<h1>Launching Rocket League</h1>
+				
+		<p>
+			Last week we discussed the reasoning behind Psyonix’s plan to release Rocket League on Playstation Plus in 2015. Through a deal with Sony (creators of Playstation), Rocket League would be initially released to the public where paid subscribers of Playstation Plus would be able to download the game for free. And while Sony would pay Psyonix for some potential lost revenue during the time, it was still a massive risk for Psyonix. Psyonix had very little money nearing the release time of Rocket League to invest in marketing the game, however if a Playstation Plus deal was made, then Sony themselves would be incentivized to spend their far larger marketing budget on getting the word out about Rocket League, which is of course beneficial for Psyonix. However, consequently, anyone during this time who downloaded the game for free would never need to pay for the game later on. So on one hand, this deal could have potentially set Rocket League up well for years to come, and without the deal the game may have fallen flat early on because not enough players got hooked. However, on the other hand, Sony aggressively marketing their game for the only month where it is free could have lead to Psyonix losing a large amount of potential customers who may have otherwise purchased the game anyway -- if not during that month, at some point later on.
+			<br><br>
+			For Psyonix, the pros outweighed the cons, and the Playstation Plus deal went through… But how did it all turn out?
+			<br><br>
+			
+			Dave Hagewood, Psyonix Founder and CEO spoke about the initial release of Rocket League in an interview, describing the first few days as if “everything was on fire."<a class="source-sup" href="#source6_1">[1]</a> And it was not because the game was failing, but rather it was too popular at launch due to the Playstation Plus deal. 
+			<br><br>
+			
+			While the need to predict and manage initial popularity of a product at release may be more obvious for a company which sells physical products where supply chains and production time need to be balanced, what are the ways that a downloadable video game can run into issues due to popularity at launch?
+			<br><br>
+			
+			Well, there are a number of reasons. For Rocket League, their issue stemmed from the unexpected volume of players from around the world concurrently playing in the days and weeks following the game’s release. Dave described that they expected a maximum of 50 thousand concurrent players on release day but that there were roughly 150 thousand concurrent players instead. To this, one’s immediate reaction may be “oh okay, so the servers got overloaded. Why don’t they just purchase more server space?” And while this is along the right track, it is a severe oversimplification of the issue of building scalable back-end architecture for games. 
+			<br><br>
+			
+			For Rocket League and many other online games (or primarily offline games which still have some level of game server authority), the game was designed with a specific scale of players in mind. Additional server space does allow for more total information to be maintained online at one time, however the management of how those servers are utilized is up to the game developers. Decisions include how and what data is delivered from the client to the server, how large of a “motorway” there should be for data delivery to and from various clients in various countries, and other protocols for manipulating data between the client and server. There could be problems with certain clients/players and their internet service providers that not only causes an issue for them but for everyone on the server, and the more people play the higher chance there is to run into this issue. “Nobody is on an island when it comes to online games, and that can make responding to issues incredibly difficult and time consuming,” said Fredrik Brönjemark, director of live services at Massive Entertainment in an interview about game back-end development<a class="source-sup" href="#source6_2">[2]</a>. Fredrik also said that “running out of capacity is rarely the problem.”Additionally, Alex Mann, a development manager at EA described this issue of scalable back-end by saying “[it] isn’t about ‘Lets throw loads of money at it and make it bigger’... it’s often a bottleneck based on the technology and engine that you’re using.”<a class="source-sup" href="#source6_2">[2]</a>
+			<br><br>
+			
+			Another issue could be a buggy codebase that only presents its issues when there are simply more people playing the game. The next section will talk about one specific type of bug, and it is a bit more technical -- I will be describing what a “memory leak” is and its possible negative implications. You definitely don’t need to know what it is, so skip <a href="#source6_skip">here</a> if you just want to know why it is relevant.
+			<br><br>
+			
+			While running any program, your computer’s memory (RAM) is constantly being manipulated by the computer’s processor to store information needed to run the program. When something new needs to be stored to be used later, some amount of memory must be allocated to hold that information. For example, if you are playing Tetris, when you start a new game, your processor will allocate a small amount of space in memory to store your current score so that it can be continually updated and displayed as you play. In this scenario, when the game is concluded, your score will be displayed for its final frame, the game will go back to the menu-screen, and since the area of memory that is holding the score will no longer be manipulated, your processor will automatically allow that space to be used for something else and move on. 
+			<br><br>
+			
+			But what if you want to keep track of your last score across multiple games? Here is where the analogy may not hold up to the rigorous scrutiny of fellow Computer Science students, but I will continue anyway since the key takeaway at the end is what is important. In this case of tracking multiple scores, you may choose to code your game so that the processor does not automatically start overriding the area of memory containing your score when you are out of the game (although writing this data to a file for later retrieval is most common). This is doable, and glossing over the technicalities of the implementation, now, unless you explicitly tell your processor that it can use that space for other things, it will leave that spot with your score alone until the entire program is terminated. So now you have a dedicated spot in memory for your previous score. 
+			<br><br>
+			
+			The issue could arise when you go to play a second game. When the new game begins, the program could display your previous score and the game could get under way. Now, your game goes to create a new spot in memory for your current game score. Upon the conclusion of the game, the program may assign your current score to be under the same identifier of “previous score”, thereby evicting any way to access the first score you saved there. This is fine since you only want to know your previous score, however, what happens to that old memory? As far as the processor knows, you’ve told it to never use that space for anything else while the program is running, so you’d need to tell the processor that this memory can be re-used before it was reassigned… but if you forgot to do this by accident (a single mis-typed line of code), then that memory will have “leaked” out and will be unusable and unrecoverable for the duration of the program’s run. Now, every time the user goes to play a new game that session, a small bit of memory will become unusable, since as far as your processor is concerned, you still want to use it. Eventually, if you played enough times, the program would become slower and slower and eventually become unresponsive or crash. 
+			<br><br>
+			
+			<a name="source6_skip"></a>
+So, now we know that a “memory leak” is an error in code where slowly as the program is run a small amount of memory becomes unusable until the program is slowed to a halt and is entirely unresponsive. This type of error is preventable, but is definitely a plausible and real-world oversight in development. For many programs, a “memory leak” like this may not ever appear to be an issue to the user, since you’ll likely never sit down for one week-long uninterrupted session of Tetris. In fact, there is an amusing story of a developer creating software for missile navigation where instead of spending time and resources managing memory leaks and including only a small amount of memory on-board, they simply estimated the total amount of memory which would be leaked during the duration of the missile’s flight and included that amount of memory onboard, knowing it would be exploding anyway. While this is… valid... in that scenario, for server-side programs ran with little to no down-time, if there were even a small memory leak it could add up over time and cause an extremely unpleasant gaming experience -- especially if the memory leakage is directly tied to the amount of players online.
+			<br><br>
+			
+			So as you can see, in at least one major way, simply “buying more server space” isn’t an end-solution. Dave described how in the early days of Rocket League’s release the servers were becoming so sluggish so quickly that, “I kid you not, at one point my wife, while I’m sleeping, is literally having to press a button every 15 minutes that resets something [with the servers].” I hypothesize that this was due to various issues, including potentially memory leaks on the back-end that were not caught when they were testing in-house or with far less players during the beta. This hypothesis is supported by Fredrik as he was discussing pitfalls of game releases in an interview: “Any number of things can go wrong on launch day, … there could be a memory leak, a single catastrophic line of incorrect code, or a spot of lag buried somewhere in the enormous server pipeline.”
+			<br><br>
+			
+			If nothing else, I hoped to have shown you how the issue of back-end development and maintenance is complicated, and that the release of an online multiplayer game has many potential problems which can arise that can’t just be solved with a magic “buy more servers” wand.
+			<br><br>
+			
+			Rocket League did go on to power through the first few weeks of struggling servers, eventually being able to fully redesign the backend to be capable of keeping up with the demand. As far as Playstation Plus, Dave said in 2016 that “we make more now every month than we did at launch,” and that “ I think you can almost objectively say that it was a good idea at this point.” But how did they turn such a profit in 2016, and how did their revenue stream strategy change throughout the years since its release? We will discuss that next week!
+			<br><br>
+			
+		</p>
+		
+		<p>
+			<a class="source-link" name="source6_1" target="_blank" href="https://www.youtube.com/watch?v=Bb_NBiJ0ilk&t=870s">[1] Interview with noclip</a>
+			<br>
+			<a class="source-link" name="source6_2" target="_blank" href="https://www.gamesradar.com/its-just-impossible-devs-explain-why-big-online-games-always-seem-to-break-at-launch/">[2] Article about game launch troubles</a>
 			<br> <br> <br>
 			<br> <br> <br>
 			
 		</p>
+
+		
+		
+		
+		
+		
 		
 		
 		<p>
@@ -270,5 +332,6 @@
 		
 	</body>
 </html>
+			
 			
 			
